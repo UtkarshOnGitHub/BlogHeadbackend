@@ -99,10 +99,10 @@ app.get('/auth/google/callback',
 });
 
 
-
+const port = process.env.PORT || 8080
 
 mongoose.connect("mongodb://localhost:27017/day-2").then(()=>{
-    server.listen(8080 , ()=>{
+    server.listen(port , ()=>{
         console.log("Server is Running on Port http://localhost:8080")
     })
 })
