@@ -17,7 +17,6 @@ const jwt = require("jsonwebtoken");
 
 
 require('dotenv').config();
-const port = process.env.PORT || 8080
 const key = process.env.SECRET_KEY
 
 const app = express();
@@ -57,6 +56,27 @@ io.on ('connection', (socket) => {
 });
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 app.get("/github/callback" ,(req,res)=>{
     let token = req.query.code
     if(token){
@@ -82,7 +102,7 @@ app.get('/auth/google/callback',
 
 
 mongoose.connect("mongodb://localhost:27017/day-2").then(()=>{
-    server.listen(port , ()=>{
+    server.listen(8080 , ()=>{
         console.log("Server is Running on Port http://localhost:8080")
     })
 })

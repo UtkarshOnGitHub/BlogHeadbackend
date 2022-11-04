@@ -3,24 +3,32 @@ const jwt = require("jsonwebtoken");
 const blogModel = require("../modals/blog.modal");
 const commentModel = require("../modals/comment.modal");
 const UserModel = require("../modals/User.model");
+const multer = require("multer")
+const fs = require("fs")
 const blog = Router();
+
+
 
 
 require('dotenv').config();
 const key = process.env.SECRET_KEY
 
-blog.post("/writeblogs" , async (req,res)=>{
+blog.post("/writeblogs" ,async (req,res)=>{
     const token = req.headers.token;
-    let {title , content} = req.body;
-    const data = jwt.verify(token , key );
-    const check = await UserModel.findById(data.id);
-    let role = check.role;
-    if(role !== "Writer"){
-        res.status(401).send("You Are Not Authorized")
-    }else{
-        const saveBlog = new blogModel({title:title , content:content,user:check.id})
-        await saveBlog.save()
-        res.send({blog:title, message:"Blog Updated"});
+    try {
+        const data = jwt.verify(token , key );
+        const check = await UserModel.findById(data.id);
+        let role = check.role;
+        if(role !== "Writer"){
+            res.status(401).send("You Are Not Authorized")
+        }else{
+            const newImage = new blogModel({title:req.body.title , 
+            content:req.body.content,user:check.id})
+            await newImage.save()
+            res.send({blog:newImage,message:"Blog Added"})
+        }
+    } catch (error) {
+        console.log(error)
     }
 })
 
