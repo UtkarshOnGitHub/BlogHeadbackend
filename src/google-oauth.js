@@ -1,6 +1,6 @@
 // var GoogleStrategy = require('passport-google-oauth20').Strategy;
 
-const passport = require("passport")
+// const passport = require("passport")
 require('dotenv').config();
 // const mongoose = require("mongoose");
 // const UserModel = require('./modals/User.model');
