@@ -13,6 +13,12 @@ const UserModel = require("./modals/User.model");
 const blogModel = require("./modals/blog.modal");
 
 
+
+// client.on('error', err => {
+//     console.log('Error ' + err);
+// });
+
+
 const jwt = require("jsonwebtoken");
 
 
@@ -77,26 +83,28 @@ io.on ('connection', (socket) => {
 
 
 
-// app.get("/github/callback" ,(req,res)=>{
-//     let token = req.query.code
-//     if(token){
-//         res.redirect("http://localhost:3000")
-//     }else{
-//         res.send("Unauthorized")
-//     }
+
+
+app.get("/github/callback" ,(req,res)=>{
+    let token = req.query.code
+    if(token){
+        res.redirect("http://localhost:3000")
+    }else{
+        res.send("Unauthorized")
+    }
     
-// });
+});
 
 
 
-// app.get('/auth/google',
-//   passport.authenticate('google', { scope: ['profile' , "email"] }));
+app.get('/auth/google',
+  passport.authenticate('google', { scope: ['profile' , "email"] }));
 
-// app.get('/auth/google/callback', 
-//   passport.authenticate('google', { failureRedirect: '/login' , session:false }),
-//   function(req, res) {
-//     res.redirect('http://localhost:3000');
-// });
+app.get('/auth/google/callback', 
+  passport.authenticate('google', { failureRedirect: '/login' , session:false }),
+  function(req, res) {
+    res.redirect('http://localhost:3000');
+});
 
 
 

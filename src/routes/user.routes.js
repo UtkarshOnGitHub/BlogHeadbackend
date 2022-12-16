@@ -3,6 +3,10 @@ const UserModel = require("../modals/User.model")
 const nodemailer = require("nodemailer")
 const jwt = require("jsonwebtoken");
 const otpModel = require("../modals/Opt.model");
+const redis = require("redis");
+
+
+const client = redis.createClient()
 
 require('dotenv').config();
 
@@ -34,6 +38,7 @@ user.post("/signup" , async (req,res)=>{
     }
     const user = new UserModel({name,email,password,age,role});
     await user.save()
+    client.setex("postdata",60, JSON.stringify(user))
     transport.sendMail({
         to:user.email,
         from:"blogDig@gmail.com",
@@ -46,6 +51,18 @@ user.post("/signup" , async (req,res)=>{
     })
     
 })
+
+const redis_post =(req,res,next)=>{
+    client.get("postdata" , (err,redis_data)=>{
+        if(err){
+            throw err
+        }else if(redis_data){
+            res.send(JSON.parse(redis_data))
+        }else{
+            next()
+        }
+    })
+}
 
 
 user.post("/login" , async(req,res)=>{
@@ -107,7 +124,6 @@ user.post("/reset" , async (req,res)=>{
 
 
 user.post("/getuser" , async (req,res)=>{
-    
     const {token} = req.body
     if(!token){
         res.status(401).send("Unauthorized")
